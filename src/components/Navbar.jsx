@@ -4,6 +4,7 @@ import { motion, AnimatePresence } from 'framer-motion'
 
 export default function Navbar({ theme, toggleTheme }) {
   const [open, setOpen] = useState(false)
+  const [active, setActive] = useState('home')
 
   useEffect(() => {
     const onResize = () => {
@@ -13,12 +14,30 @@ export default function Navbar({ theme, toggleTheme }) {
     return () => window.removeEventListener('resize', onResize)
   }, [])
 
+  useEffect(() => {
+    const sections = ['home', 'services', 'portfolio', 'culture', 'contact']
+    const handler = () => {
+      const scrollY = window.scrollY + 96 // account for header height
+      let current = 'home'
+      for (const id of sections) {
+        const el = document.getElementById(id)
+        if (!el) continue
+        const top = el.offsetTop
+        if (scrollY >= top) current = id
+      }
+      setActive(current)
+    }
+    handler()
+    window.addEventListener('scroll', handler, { passive: true })
+    return () => window.removeEventListener('scroll', handler)
+  }, [])
+
   const navItems = [
-    { href: '#home', label: 'Home' },
-    { href: '#services', label: 'Services' },
-    { href: '#portfolio', label: 'Work' },
-    { href: '#culture', label: 'Culture' },
-    { href: '#contact', label: 'Contact' },
+    { href: '#home', label: 'Home', id: 'home' },
+    { href: '#services', label: 'Services', id: 'services' },
+    { href: '#portfolio', label: 'Work', id: 'portfolio' },
+    { href: '#culture', label: 'Culture', id: 'culture' },
+    { href: '#contact', label: 'Contact', id: 'contact' },
   ]
 
   return (
@@ -31,11 +50,20 @@ export default function Navbar({ theme, toggleTheme }) {
 
         <nav className="hidden lg:flex items-center gap-8">
           {navItems.map((n) => (
-            <a key={n.href} href={n.href} className="text-sm font-medium text-gray-700 hover:text-gray-900 dark:text-gray-300 dark:hover:text-white transition-colors">
+            <a
+              key={n.href}
+              href={n.href}
+              aria-current={active === n.id ? 'page' : undefined}
+              className={`text-sm font-medium transition-colors ${
+                active === n.id
+                  ? 'text-indigo-600 dark:text-indigo-400'
+                  : 'text-gray-700 hover:text-gray-900 dark:text-gray-300 dark:hover:text-white'
+              }`}
+            >
               {n.label}
             </a>
           ))}
-          <button onClick={toggleTheme} aria-label="Toggle theme" className="rounded-full p-2 bg-gray-900/5 dark:bg-white/10 text-gray-900 dark:text-white">
+          <button onClick={toggleTheme} aria-label="Toggle theme" className="rounded-full p-2 bg-gray-900/5 dark:bg-white/10 text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-indigo-500">
             <AnimatePresence initial={false} mode="wait">
               {theme === 'dark' ? (
                 <motion.div key="moon" initial={{ rotate: -90, opacity: 0 }} animate={{ rotate: 0, opacity: 1 }} exit={{ rotate: 90, opacity: 0 }} transition={{ duration: 0.2 }}>
@@ -55,7 +83,7 @@ export default function Navbar({ theme, toggleTheme }) {
           <button onClick={toggleTheme} aria-label="Toggle theme" className="rounded-full p-2 bg-gray-900/5 dark:bg-white/10 text-gray-900 dark:text-white">
             {theme === 'dark' ? <Moon className="h-5 w-5" /> : <Sun className="h-5 w-5" />}
           </button>
-          <button onClick={() => setOpen((v) => !v)} className="p-2 rounded-md bg-gray-900/5 dark:bg-white/10">
+          <button onClick={() => setOpen((v) => !v)} className="p-2 rounded-md bg-gray-900/5 dark:bg-white/10" aria-expanded={open} aria-controls="mobile-menu">
             {open ? <X className="h-6 w-6" /> : <Menu className="h-6 w-6" />}
           </button>
         </div>
@@ -63,10 +91,20 @@ export default function Navbar({ theme, toggleTheme }) {
 
       <AnimatePresence>
         {open && (
-          <motion.nav initial={{ height: 0, opacity: 0 }} animate={{ height: 'auto', opacity: 1 }} exit={{ height: 0, opacity: 0 }} className="lg:hidden px-4 pb-4">
-            <div className="grid gap-2 rounded-xl p-3 bg-white/70 dark:bg-black/40 border border-white/20 dark:border-white/10">
+          <motion.nav id="mobile-menu" initial={{ height: 0, opacity: 0 }} animate={{ height: 'auto', opacity: 1 }} exit={{ height: 0, opacity: 0 }} className="lg:hidden px-4 pb-4">
+            <div className="grid gap-2 rounded-xl p-3 bg-white/70 dark:bg.black/40 dark:bg-black/40 border border-white/20 dark:border-white/10">
               {navItems.map((n) => (
-                <a key={n.href} href={n.href} onClick={() => setOpen(false)} className="text-sm font-medium text-gray-700 hover:text-gray-900 dark:text-gray-300 dark:hover:text-white transition-colors">
+                <a
+                  key={n.href}
+                  href={n.href}
+                  onClick={() => setOpen(false)}
+                  aria-current={active === n.id ? 'page' : undefined}
+                  className={`text-sm font-medium transition-colors ${
+                    active === n.id
+                      ? 'text-indigo-600 dark:text-indigo-400'
+                      : 'text-gray-700 hover:text-gray-900 dark:text-gray-300 dark:hover:text-white'
+                  }`}
+                >
                   {n.label}
                 </a>
               ))}

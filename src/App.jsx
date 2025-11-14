@@ -5,6 +5,7 @@ import Services from './components/Services'
 import Portfolio from './components/Portfolio'
 import Culture from './components/Culture'
 import Contact from './components/Contact'
+import ChatWidget from './components/ChatWidget'
 
 function App() {
   const [theme, setTheme] = useState('dark')
@@ -13,6 +14,16 @@ function App() {
     document.documentElement.classList.toggle('dark', theme === 'dark')
     return () => document.documentElement.classList.remove('dark')
   }, [theme])
+
+  // Smooth scrolling behavior
+  useEffect(() => {
+    if ('scrollBehavior' in document.documentElement.style) {
+      document.documentElement.style.scrollBehavior = 'smooth'
+    }
+    return () => {
+      document.documentElement.style.scrollBehavior = ''
+    }
+  }, [])
 
   const toggleTheme = () => setTheme((t) => (t === 'dark' ? 'light' : 'dark'))
 
@@ -34,6 +45,9 @@ function App() {
           <a href="#home" className="text-sm text-indigo-600 hover:text-indigo-500">Back to top</a>
         </div>
       </footer>
+
+      {/* Chatbot bubble */}
+      <ChatWidget />
     </div>
   )
 }

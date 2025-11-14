@@ -3,14 +3,20 @@ import { motion } from 'framer-motion'
 const works = [
   {
     title: 'Fintech Analytics Dashboard',
+    subtitle: 'Insights at the speed of markets',
+    metric: '4.8s → 900ms load',
     tags: ['Next.js', 'RAG', 'Timeseries'],
   },
   {
     title: 'AI Customer Support Assistant',
+    subtitle: 'Resolve tickets in seconds',
+    metric: '-42% avg. handle time',
     tags: ['Agent', 'Vector DB', 'Realtime'],
   },
   {
     title: 'E-commerce Headless Platform',
+    subtitle: 'Scale to global flash sales',
+    metric: '+23% checkout conversion',
     tags: ['Remix', 'Edge', 'CDN'],
   },
 ]
@@ -25,17 +31,26 @@ export default function Portfolio() {
         </div>
         <div className="grid md:grid-cols-3 gap-6">
           {works.map((w, i) => (
-            <motion.div key={w.title} initial={{ y: 20, opacity: 0 }} whileInView={{ y: 0, opacity: 1 }} viewport={{ once: true }} transition={{ duration: 0.5, delay: i * 0.05 }} className="relative rounded-2xl p-6 bg-white/70 dark:bg-white/5 border border-gray-200/60 dark:border-white/10 overflow-hidden group">
+            <motion.article
+              key={w.title}
+              initial={{ y: 20, opacity: 0 }}
+              whileInView={{ y: 0, opacity: 1 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.5, delay: i * 0.05 }}
+              className="relative rounded-2xl p-6 bg-white/70 dark:bg-white/5 border border-gray-200/60 dark:border-white/10 overflow-hidden group"
+            >
               <div className="absolute inset-0 bg-gradient-to-br from-indigo-500/10 to-violet-600/10 opacity-0 group-hover:opacity-100 transition" />
               <div className="relative">
                 <h3 className="text-xl font-bold text-gray-900 dark:text-white">{w.title}</h3>
+                {w.subtitle && <p className="mt-1 text-sm text-gray-600 dark:text-gray-300">{w.subtitle}</p>}
+                {w.metric && <p className="mt-2 text-xs font-medium text-emerald-600 dark:text-emerald-400">{w.metric}</p>}
                 <div className="mt-3 flex flex-wrap gap-2">
                   {w.tags.map((t) => (
-                    <span key={t} className="text-xs px-2 py-1 rounded-full bg-gray-900/5 dark:bg-white/10 text-gray-700 dark:text-gray-300">{t}</span>
+                    <span key={t} className="text-xs px-2 py-1 rounded-full bg-gray-900/5 dark:bg.white/10 dark:bg-white/10 text-gray-700 dark:text-gray-300">{t}</span>
                   ))}
                 </div>
               </div>
-            </motion.div>
+            </motion.article>
           ))}
         </div>
       </div>

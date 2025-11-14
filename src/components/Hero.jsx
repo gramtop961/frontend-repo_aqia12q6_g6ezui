@@ -1,11 +1,25 @@
-import Spline from '@splinetool/react-spline'
+import { Suspense } from 'react'
 import { motion } from 'framer-motion'
+
+let Spline
+try {
+  // Lazy import at runtime to enable code-splitting and faster TTI
+  Spline = (await import('@splinetool/react-spline')).default
+} catch (e) {
+  Spline = null
+}
 
 export default function Hero() {
   return (
     <section id="home" className="relative min-h-[90vh] flex items-center overflow-hidden">
       <div className="absolute inset-0">
-        <Spline scene="https://prod.spline.design/VyGeZv58yuk8j7Yy/scene.splinecode" style={{ width: '100%', height: '100%' }} />
+        <Suspense fallback={<div className="w-full h-full bg-gradient-to-br from-indigo-950 via-black to-violet-900" />}> 
+          {Spline ? (
+            <Spline scene="https://prod.spline.design/VyGeZv58yuk8j7Yy/scene.splinecode" style={{ width: '100%', height: '100%' }} />
+          ) : (
+            <div className="w-full h-full bg-gradient-to-br from-indigo-950 via-black to-violet-900" />
+          )}
+        </Suspense>
       </div>
 
       <div className="absolute inset-0 bg-gradient-to-tr from-black/70 via-transparent to-violet-600/30 pointer-events-none" />
