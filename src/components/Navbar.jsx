@@ -41,7 +41,7 @@ export default function Navbar({ theme, toggleTheme }) {
   ]
 
   return (
-    <header className="fixed top-0 inset-x-0 z-50 backdrop-blur-xl bg-white/60 dark:bg-black/40 border-b border-white/20 dark:border-white/10">
+    <header className="fixed top-0 inset-x-0 z-50 backdrop-blur-xl bg-white/60 dark:bg-black/40 border-b border-black/10 dark:border-white/10">
       <div className="max-w-7xl mx-auto flex items-center justify-between px-4 py-3">
         <a href="#home" className="flex items-center gap-2">
           <MountainSnow className="h-6 w-6 text-indigo-600 dark:text-indigo-400" />
@@ -92,7 +92,7 @@ export default function Navbar({ theme, toggleTheme }) {
       <AnimatePresence>
         {open && (
           <motion.nav id="mobile-menu" initial={{ height: 0, opacity: 0 }} animate={{ height: 'auto', opacity: 1 }} exit={{ height: 0, opacity: 0 }} className="lg:hidden px-4 pb-4">
-            <div className="grid gap-2 rounded-xl p-3 bg-white/70 dark:bg.black/40 dark:bg-black/40 border border-white/20 dark:border-white/10">
+            <div className="grid gap-2 rounded-xl p-3 bg-white/70 dark:bg-black/40 border border-black/10 dark:border-white/10">
               {navItems.map((n) => (
                 <a
                   key={n.href}
